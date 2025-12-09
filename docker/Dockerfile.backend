@@ -1,0 +1,33 @@
+FROM eclipse-temurin:21-jdk-jammy
+
+# Install dependencies for analysis tools
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    nodejs \
+    npm \
+    git \
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python tools
+RUN pip3 install bandit
+
+# Install Node.js tools
+RUN npm install -g eslint
+
+# Install SpotBugs (Manual download as apt version might be old)
+ENV SPOTBUGS_VERSION=4.8.3
+RUN wget https://github.com/spotbugs/spotbugs/releases/download/${SPOTBUGS_VERSION}/spotbugs-${SPOTBUGS_VERSION}.zip && \
+    unzip spotbugs-${SPOTBUGS_VERSION}.zip -d /opt/ && \
+    ln -s /opt/spotbugs-${SPOTBUGS_VERSION} /opt/spotbugs && \
+    rm spotbugs-${SPOTBUGS_VERSION}.zip
+
+ENV PATH="/opt/spotbugs/bin:${PATH}"
+
+WORKDIR /app
+COPY . .
+RUN ./mvnw clean package -DskipTests
+
+ENTRYPOINT ["java", "-jar", "target/backend-0.0.1-SNAPSHOT.jar"]
