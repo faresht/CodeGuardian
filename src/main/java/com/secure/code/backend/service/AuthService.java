@@ -39,7 +39,7 @@ public class AuthService {
                                 new UsernamePasswordAuthenticationToken(
                                                 request.getUsername(),
                                                 request.getPassword()));
-                User user = userRepository.findByUsername(request.getUsername())
+                User user = userRepository.findByUsernameIgnoreCase(request.getUsername())
                                 .orElseThrow();
                 // Null check not strictly needed due to orElseThrow, but satisfying linter if
                 // needed or just ignoring
