@@ -36,23 +36,44 @@ Built with **Spring Boot**, **Ollama**, and **Spring AI**, it ensures your code 
 *   [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
 *   (Optional) Java 21 if running locally without Docker.
 
+### Building Locally
+If you prefer to run the application locally without Docker or want to build the project manually:
+
+```bash
+./mvnw.cmd clean install
+```
+This command typically skips tests by default in some configurations, but here it runs the full build including tests.
+
 ---
 
 ## ⚡ Quick Start
 
-### 1. Clone the Repository
 ```bash
 git clone https://github.com/faresht/CodeGuardian.git
 cd codeguardian
 ```
 
-### 2. Start the Application
-Use Docker Compose to bring up the backend, database, and Ollama services.
+### 2. Run the Application
+You can run the application either using Docker Compose (easiest) or locally with Maven.
 
+#### Option A: Run with Docker Compose (Recommended)
+This starts everything (Backend, Database, AI Model) in containers.
 ```bash
 docker-compose up --build
 ```
 *Wait for the services to initialize. The first run may take a few minutes to pull the AI model.*
+
+#### Option B: Run Locally with Maven
+If you prefer to run the backend on your machine (e.g., for debugging), you still need Docker for the database and AI service.
+
+1. **Start Dependencies (PostgreSQL & Ollama)**:
+   ```bash
+   docker-compose up -d postgres ollama
+   ```
+2. **Run the Backend**:
+   ```bash
+   ./mvnw.cmd spring-boot:run
+   ```
 
 ### 3. Access Swagger UI
 Once running, open your browser to explore and test the APIs:
